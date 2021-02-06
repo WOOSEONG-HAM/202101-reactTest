@@ -10,6 +10,7 @@ function createBulkTodos() {
       id: i,
       text: `할 일 ${i}`,
       checked: false,
+      update: false,
     });
   }
   return array;
@@ -27,6 +28,7 @@ const App = () => {
       id: nextId.current,
       text,
       checked: false,
+      update: false,
     };
     setTodos(todos => todos.concat(todo));
     nextId.current += 1; // nextId 1 씩 더하기
@@ -44,10 +46,28 @@ const App = () => {
     );
   }, []);
 
+  const updateCheck = useCallback(id => {
+    setTodos(todos =>
+      todos.map(todo =>
+        todo.id === id ? { ...todo, update: !todo.update } : todo,
+      ),
+    );
+  }, []);
+  
+  const onUpdate = useCallback((id, value) => {
+    // console.log('값: ', e.target.value);
+    console.log('값: ', value);
+    setTodos(todos =>
+      todos.map(todo =>
+        todo.id === id ? { ...todo, text: value } : todo,
+      ),
+    );
+  }, []);
+
   return (
     <TodoTemplate>
       <TodoInsert onInsert={onInsert} />
-      <TodoList todos={todos} onRemove={onRemove} onToggle={onToggle} />
+      <TodoList todos={todos} onRemove={onRemove} onToggle={onToggle} onUpdate={onUpdate} updateCheck={updateCheck} />
     </TodoTemplate>
   );
 };

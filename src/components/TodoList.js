@@ -3,7 +3,7 @@ import { List } from 'react-virtualized';
 import TodoListItem from './TodoListItem';
 import './TodoList.scss';
 
-const TodoList = ({ todos, onRemove, onToggle }) => {
+const TodoList = ({ todos, onRemove, onToggle, onUpdate, updateCheck }) => {
   const rowRenderer = useCallback(
     ({ index, key, style }) => {
       const todo = todos[index];
@@ -13,11 +13,13 @@ const TodoList = ({ todos, onRemove, onToggle }) => {
           key={key}
           onRemove={onRemove}
           onToggle={onToggle}
+          onUpdate={onUpdate}
+          updateCheck={updateCheck}
           style={style}
         />
       );
     },
-    [onRemove, onToggle, todos],
+    [onRemove, onToggle, onUpdate, todos, updateCheck],
   );
   return (
     <List

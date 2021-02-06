@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   MdCheckBoxOutlineBlank,
   MdCheckBox,
   MdRemoveCircleOutline,
+  MdCreate,
 } from 'react-icons/md';
 import cn from 'classnames';
 import './TodoListItem.scss';
 
-const TodoListItem = ({ todo, onRemove, onToggle, style }) => {
-  const { id, text, checked } = todo;
+const TodoListItem = ({ todo, onRemove, onToggle, style, updateCheck, onUpdate }) => {
+  const { id, text, checked, update } = todo;
+  const [value, setValue] = useState(text);
+
+  const onChange = e => {
+    setValue(e.target.value);
+    onUpdate(id, value);
+  }
 
   return (
     <div className="TodoListItem-virtualized" style={style}>
@@ -18,7 +25,10 @@ const TodoListItem = ({ todo, onRemove, onToggle, style }) => {
           onClick={() => onToggle(id)}
         >
           {checked ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}
-          <div className="text">{text}</div>
+          {update ? <input className="text" placeholder={text} onChange={onChange} /> : <div className="text">{text}</div>}
+        </div>
+        <div className="update" onClick={() => updateCheck(id)}>
+          <MdCreate />
         </div>
         <div className="remove" onClick={() => onRemove(id)}>
           <MdRemoveCircleOutline />
