@@ -1,7 +1,12 @@
 import React, { useRef, useState, useCallback } from 'react';
+import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+import Login from './components/login/Login';
+import Registart from './components/login/Registart';
 import TodoTemplate from './components/TodoTemplate';
 import TodoInsert from './components/TodoInsert';
 import TodoList from './components/TodoList';
+
+import { useSelector } from 'react-redux';
 
 function createBulkTodos() {
   const array = [];
@@ -55,8 +60,6 @@ const App = () => {
   }, []);
   
   const onUpdate = useCallback((id, value) => {
-    // console.log('값: ', e.target.value);
-    console.log('값: ', value);
     setTodos(todos =>
       todos.map(todo =>
         todo.id === id ? { ...todo, text: value } : todo,
@@ -64,11 +67,43 @@ const App = () => {
     );
   }, []);
 
+  const { loginData } = useSelector((state) => state.user);
+
   return (
-    <TodoTemplate>
-      <TodoInsert onInsert={onInsert} />
-      <TodoList todos={todos} onRemove={onRemove} onToggle={onToggle} onUpdate={onUpdate} updateCheck={updateCheck} />
-    </TodoTemplate>
+    <>
+      <BrowserRouter>
+        <Switch>
+          {loginData && loginData.data && loginData.data.userId ? (
+            <>
+              <Route exact path="/">
+                <TodoTemplate>
+                  <TodoInsert onInsert={onInsert} />
+                  <TodoList todos={todos} onRemove={onRemove} onToggle={onToggle} onUpdate={onUpdate} updateCheck={updateCheck} />
+                </TodoTemplate>
+              </Route>
+              <Redirect exact path="/*" to="/">
+                <TodoTemplate>
+                  <TodoInsert onInsert={onInsert} />
+                  <TodoList todos={todos} onRemove={onRemove} onToggle={onToggle} onUpdate={onUpdate} updateCheck={updateCheck} />
+                </TodoTemplate>
+              </Redirect>
+            </>
+          ) : (
+            <>
+              <Route exact path="/">
+                <Login/>
+              </Route>
+              <Route exact path="/Registart">
+                <Registart/>
+              </Route>
+              <Redirect exact path="/*" to="/">
+                <Login/>
+              </Redirect>
+            </>
+          )}
+        </Switch>
+      </BrowserRouter>
+    </>
   );
 };
 
