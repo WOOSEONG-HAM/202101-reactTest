@@ -12,7 +12,7 @@ const TodoListItem = ({ todo, onRemove, onToggle, style }) => {
 
   return (
     <div className="TodoListItem-virtualized" style={style}>
-      <div className="TodoListItem">
+      <div className={cn('TodoListItem', { checked })}>
         <div
           className={cn('checkbox', { checked })}
           onClick={() => onToggle(id)}

@@ -11,6 +11,9 @@
   padding: 1rem;
   display: flex;
   align-items: center; // 세로 중앙 정렬
+  &.checked {
+    background-color: #ddfbff; 
+  }
   .checkbox {
     cursor: pointer;
     flex: 1; // 차지할 수 있는 영역 모두 차지
