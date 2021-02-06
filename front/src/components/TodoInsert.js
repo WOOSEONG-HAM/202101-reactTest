@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import { MdAdd } from 'react-icons/md';
 import './TodoInsert.scss';
 
@@ -9,16 +10,18 @@ const TodoInsert = ({ onInsert }) => {
     setValue(e.target.value);
   }, []);
 
+  const { loginData } = useSelector((state) => state.user);
+
   const onSubmit = useCallback(
     e => {
-      onInsert(value);
+      onInsert(value, loginData.data.userId);
       setValue(''); // value 값 초기화
 
       // submit 이벤트는 브라우저에서 새로고침을 발생시킵니다.
       // 이를 방지하기 위하여 이 함수를 호출합니다.
       e.preventDefault();
     },
-    [onInsert, value],
+    [loginData.data.userId, onInsert, value],
   );
 
   return (

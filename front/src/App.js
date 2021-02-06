@@ -16,6 +16,7 @@ function createBulkTodos() {
       text: `할 일 ${i}`,
       checked: false,
       update: false,
+      userId: '',
     });
   }
   return array;
@@ -28,12 +29,13 @@ const App = () => {
   // ref 를 사용하여 변수 담기
   const nextId = useRef(4);
 
-  const onInsert = useCallback(text => {
+  const onInsert = useCallback((text, userId) => {
     const todo = {
       id: nextId.current,
       text,
       checked: false,
       update: false,
+      userId,
     };
     setTodos(todos => todos.concat(todo));
     nextId.current += 1; // nextId 1 씩 더하기
